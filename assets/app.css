@@ -108,3 +108,5 @@ aside.masthead{position:sticky!important;top:0;z-index:100;overflow:visible;heig
 .market-picker-trigger{border:1px solid #586369;border-radius:5px;background:#191e21;min-height:40px;padding:9px 12px}.market-picker-trigger:hover{border-color:#81908d}.market-picker-trigger[aria-expanded=true],.market-picker-trigger:focus-visible{border-color:#b6ff00}html[data-theme=light] .market-picker-trigger{background:#fff;border-color:#acbab4}html[data-theme=light] .market-picker-trigger[aria-expanded=true]{border-color:#76975e}
 
 .fee-model-note{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 18px;margin:-2px 0 12px;font-size:10px;color:#aebbc0}.fee-model-note>span:first-child{color:#c6dfae}.margin-basis-note{margin:8px 0 10px;font-size:11px;color:#b4bec1}html[data-theme=light] .fee-model-note,html[data-theme=light] .margin-basis-note{color:#4d5b62}html[data-theme=light] .fee-model-note>span:first-child{color:#3d6b00}
+
+.result.margin-result{display:block}.margin-result .price{margin:10px 0 4px}.margin-result .entered-price-context{margin:0 0 8px;font-size:13px;color:#dce6e8}.margin-result>p:last-child{margin:0;font-size:11px}
