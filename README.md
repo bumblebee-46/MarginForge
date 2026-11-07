@@ -1,4 +1,4 @@
-# MarginForge — v2.1 calculation reference
+# MarginForge — v2.2 calculation reference
 
 ## Run and publish
 
@@ -229,7 +229,7 @@ function tiktokPrice(r,target,style){if(!Number.isFinite(target)||target>=100)th
 
 Single-product fields are stored in browser localStorage under marginforge-product-inputs-v1, separately for each marketplace and country. Switching channels or countries restores that profile's values; new TikTok inputs default to £0.50 TikTok shipping and 5% Smart Promotion. Other new channels begin with zero product/shipping costs. Reset product replaces the current saved inputs and restores the TikTok-specific defaults where applicable. Bulk pasted data and file uploads are not saved by this feature. Browser storage failure falls back to in-session state. Avoid entering confidential data on shared computers.
 
-The app explicitly identifies margin on selling price for Amazon and TikTok, and margin on revenue excluding VAT for eBay, OnCommerce and Shopify. Fee model v2.1 is labelled Configured 4 Oct 2026. This is the application configuration date, not confirmation that seller fees were verified live on that date. These additions do not change any pricing formula.
+The app explicitly identifies margin on selling price for Amazon and TikTok, and margin on revenue excluding VAT for eBay, OnCommerce and Shopify. Fee model v2.2 is labelled Configured 7 Nov 2026. This is the application configuration date, not confirmation that seller fees were verified live on that date. These additions do not change any pricing formula.
 
 ## Interface languages
 
