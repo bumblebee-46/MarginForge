@@ -22,7 +22,7 @@ Only product cost, FBA fee, storage and category enter this calculation. Shippin
 - Referral = max(round(S × category rate, 2), category minimum).
 - Digital fee = round(referral × 2%, 2) + round(F × 2%, 2).
 - Profit = round(S − C − VAT − referral − digital fee − F − T, 2).
-- Margin % = profit / S × 100.
+- Margin % = profit / (S − VAT) × 100 (revenue excluding VAT; changed in v2.2, previously profit / S).
 - Reported total fees = referral + digital fee + F + T (storage is included).
 
 The category rate applies to the entire selling price, rather than progressively to portions of it.
@@ -161,7 +161,7 @@ function dFee(ref,fba){return(Math.round(ref*0.02*100)/100)+(Math.round(fba*0.02
 function mCalc(sp,cost,fba,stor,k){
   const vat=sp*20/120,ref=aFee(sp,k),dst=dFee(ref,fba);
   const pft=Math.round((sp-(cost+vat+ref+dst+fba+stor))*100)/100;
-  return{margin:pft/sp,profit:pft,vat,ref,dst};
+  return{margin:pft/(sp-vat),profit:pft,vat,ref,dst};
 }
 
 function nextP(p){
@@ -229,7 +229,7 @@ function tiktokPrice(r,target,style){if(!Number.isFinite(target)||target>=100)th
 
 Single-product fields are stored in browser localStorage under marginforge-product-inputs-v1, separately for each marketplace and country. Switching channels or countries restores that profile's values; new TikTok inputs default to £0.50 TikTok shipping and 5% Smart Promotion. Other new channels begin with zero product/shipping costs. Reset product replaces the current saved inputs and restores the TikTok-specific defaults where applicable. Bulk pasted data and file uploads are not saved by this feature. Browser storage failure falls back to in-session state. Avoid entering confidential data on shared computers.
 
-The app explicitly identifies margin on selling price for Amazon and TikTok, and margin on revenue excluding VAT for eBay, OnCommerce and Shopify. Fee model v2.2 is labelled Configured 7 Nov 2026. This is the application configuration date, not confirmation that seller fees were verified live on that date. These additions do not change any pricing formula.
+The app explicitly identifies margin on selling price for Amazon France, Amazon Germany and TikTok, and margin on revenue excluding VAT for Amazon UK, eBay, OnCommerce and Shopify. Fee model v2.2 is labelled Configured 7 Nov 2026. This is the application configuration date, not confirmation that seller fees were verified live on that date. From v2.2 the Amazon UK margin is profit ÷ (selling price − VAT), and its default target margin is 6.18% (the equivalent of the previous 5.15%).
 
 ## Interface languages
 
@@ -242,3 +242,9 @@ New profiles and Reset product leave cost, shipping, target margin and current s
 ## Presentation polish
 
 Result cards prioritize the calculated outcome. In Margin Engine the redundant margin metric is hidden, leaving net profit and total fees below the main margin. Fee values are aligned, Net Profit has a final highlighted row, incomplete fields have a calculator illustration and missing-input checklist. Spacing uses consistent 40 px fields, 16 px layout gaps, and 8 px card corners. On mobile, marketplace tabs scroll horizontally, inputs stack, bulk actions wrap, and tables scroll inside their container. Subtle transitions respect reduced-motion settings. Expanded local translations cover common errors, import prompts, formula notes and About/Privacy. CSV identifiers are preserved. Browser rendering still requires a manual visual check at desktop, tablet and mobile widths; numerical and source/package validation does not establish visual rendering.
+
+## FBA price steps and "FBA fee quoted at (SP)" (v2.2)
+
+The FBA fee entered is the base fee for a selling price at or below the step price. Above it the fee steps up automatically: Amazon UK +£0.40 above £10.00; Amazon Germany +€0.40 above €11.00; Amazon France above €12.00, +€0.42 if the base fee is above €4, otherwise +€0.52. The digital services fee (UK 2%, DE 2%, FR 3%) applies to the stepped fee.
+
+The optional field "FBA fee quoted at (SP)" (bulk column `FBAFeeAtSP`) tells the app at which selling price the typed fee was read. Blank means the fee is a base fee. If the quoted SP is above the step price, the step is removed to recover the base fee. France: a fee of €4.42–€4.52 quoted above €12 is ambiguous and is rejected; a fee lower than the step is rejected.
