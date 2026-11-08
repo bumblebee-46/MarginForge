@@ -1,5 +1,7 @@
 # MarginForge — v2.2 calculation reference
 
+MarginForge is owned and operated by Fenronik Global. © 2026 Fenronik Global.
+
 ## Run and publish
 
 Open the supplied standalone testing index.html directly for a quick test. For the multi-file package, keep index.html and assets/ together and run `python3 -m http.server 8000`, then open http://localhost:8000. Upload this package's contents to your GitHub repository; no build step is required.
