@@ -243,8 +243,10 @@ New profiles and Reset product leave cost, shipping, target margin and current s
 
 Result cards prioritize the calculated outcome. In Margin Engine the redundant margin metric is hidden, leaving net profit and total fees below the main margin. Fee values are aligned, Net Profit has a final highlighted row, incomplete fields have a calculator illustration and missing-input checklist. Spacing uses consistent 40 px fields, 16 px layout gaps, and 8 px card corners. On mobile, marketplace tabs scroll horizontally, inputs stack, bulk actions wrap, and tables scroll inside their container. Subtle transitions respect reduced-motion settings. Expanded local translations cover common errors, import prompts, formula notes and About/Privacy. CSV identifiers are preserved. Browser rendering still requires a manual visual check at desktop, tablet and mobile widths; numerical and source/package validation does not establish visual rendering.
 
-## FBA price steps and "FBA fee quoted at (SP)" (v2.2)
+## FBA price steps and "SP at which this FBA fee was calculated" (v2.2)
 
-The FBA fee entered is the base fee for a selling price at or below the step price. Above it the fee steps up automatically: Amazon UK +£0.40 above £10.00; Amazon Germany +€0.40 above €11.00; Amazon France above €12.00, +€0.42 if the base fee is above €4, otherwise +€0.52. The digital services fee (UK 2%, DE 2%, FR 3%) applies to the stepped fee.
+For Amazon UK, France and Germany the FBA fee depends on the selling price, so the app never assumes which side of the step the typed fee came from. The user enters the FBA fee and the selling price at which it was calculated (required in single-product mode, and as the `FBAFeeAtSP` column in bulk).
 
-The optional field "FBA fee quoted at (SP)" (bulk column `FBAFeeAtSP`) tells the app at which selling price the typed fee was read. Blank means the fee is a base fee. If the quoted SP is above the step price, the step is removed to recover the base fee. France: a fee of €4.42–€4.52 quoted above €12 is ambiguous and is rejected; a fee lower than the step is rejected.
+Step rules: Amazon UK +£0.40 above £10.00; Amazon Germany +€0.40 above €11.00; Amazon France above €12.00, +€0.42 if the base fee is above €4, otherwise +€0.52. The digital services fee (UK 2%, DE 2%, FR 3%) applies to the stepped fee.
+
+If the quoted SP is at or below the step price, the typed fee is the base fee. If it is above, the step is removed to recover the base fee, and the correct fee is then applied to every price tested. France: a fee of €4.42–€4.52 quoted above €12 is ambiguous and is rejected; a fee lower than the step is rejected. Bulk files without `FBAFeeAtSP` (including header-less pastes) are rejected row by row.
