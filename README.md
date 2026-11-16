@@ -18,7 +18,7 @@ Notation: S = VAT-inclusive selling price, C = product cost, F = entered FBA fee
 
 ## Amazon UK
 
-Only product cost, FBA fee, storage and category enter this calculation. Shipping, delivery, other costs, quantity and advertising are not deducted by this branch. C and F must be positive; storage must be non-negative.
+In FBA mode, product cost, FBA fee, storage and category enter this calculation. Amazon UK FBM uses the entered fulfilment cost and excludes storage fees. FBM bulk templates and exports omit storage, and older FBM CSV files with a Storage column can still be imported. Shipping, delivery, other costs, quantity and advertising are not deducted by this branch. C and F must be positive; storage must be non-negative.
 
 - VAT = S × 20 / 120 (not rounded before deduction).
 - Referral = max(round(S × category rate, 2), category minimum).
