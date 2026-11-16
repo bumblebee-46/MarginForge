@@ -196,3 +196,148 @@ html[data-theme=light] .fenronik-wordmark small {color:#17624f;}
 .analysis-row:has(>#analysisSize[hidden]) {display:none;}
 @media(min-width:901px){.workspace-controls .market{width:auto;}}
 @media(max-width:600px){.workspace-controls .market{flex-wrap:wrap;}}
+
+/* The workspace banner carries the Fenronik homepage's grid, warm light and mint accents. */
+.wrap>.heading {
+  position:relative;
+  isolation:isolate;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(220px,.68fr);
+  align-items:center;
+  gap:16px 28px;
+  min-height:164px;
+  padding:clamp(19px,2.5vw,34px);
+  overflow:hidden;
+  border:1px solid #f4b06e38;
+  border-radius:14px;
+  background:radial-gradient(ellipse at 0% 0%,#ff7a3d2b,transparent 57%),
+    radial-gradient(ellipse at 82% 47%,#76e4c024,transparent 54%),
+    linear-gradient(112deg,#171423,#0d1727 57%,#0d222c);
+  box-shadow:0 14px 35px #05091137;
+}
+.wrap>.heading::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  background-image:linear-gradient(#a0aecc17 1px,transparent 1px),
+    linear-gradient(90deg,#a0aecc17 1px,transparent 1px);
+  background-size:29px 29px;
+  mask-image:linear-gradient(105deg,transparent 5%,#000 72%);
+}
+.workspace-title,.wrap>.heading .context-controls {z-index:1;}
+.wrap>.heading .workspace-title h1 {
+  max-width:20ch;
+  margin:0;
+  color:#f4f6fa;
+  font-size:clamp(26px,3.3vw,46px);
+  line-height:1.08;
+  letter-spacing:-.035em;
+  text-wrap:balance;
+}
+.wrap>.heading .context-controls {
+  grid-column:1/-1;
+  grid-row:2;
+  width:fit-content;
+  max-width:100%;
+  margin:0;
+}
+.wrap>.heading .context-controls:not(:has(.field:not([hidden]))) {display:none;}
+.wrap>.heading .context-controls .field {color:#e4eaf4;}
+.wrap>.heading .context-controls small {color:#c0cce0;}
+.forge-art {
+  position:absolute;
+  inset:0 0 0 auto;
+  width:48%;
+  overflow:hidden;
+  pointer-events:none;
+  mask-image:linear-gradient(90deg,transparent,#000 24%);
+}
+.forge-orbit {
+  position:absolute;
+  width:clamp(180px,22vw,305px);
+  aspect-ratio:1;
+  top:52%;
+  right:10%;
+  border:1px solid #76e4c040;
+  border-radius:50%;
+  transform:translateY(-50%);
+  background:url("fenronik-wolf.png") center/31% auto no-repeat;
+  opacity:.37;
+}
+.forge-orbit::before,.forge-orbit::after {
+  content:"";
+  position:absolute;
+  inset:12%;
+  border:1px dashed #76e4c077;
+  border-radius:50%;
+}
+.forge-orbit::after {
+  inset:-8%;
+  border-color:#e9b44c68;
+  border-style:dotted;
+}
+.forge-bars {
+  position:absolute;
+  inset:20% 9% 13% 16%;
+  display:flex;
+  gap:clamp(5px,1.15vw,15px);
+  align-items:flex-end;
+  border-bottom:1px solid #76e4c052;
+}
+.forge-bars i {
+  flex:1;
+  height:var(--bar-height);
+  border:1px solid #76e4c064;
+  border-bottom:0;
+  border-radius:5px 5px 0 0;
+  background:linear-gradient(0deg,#76e4c006,#76e4c04a);
+  box-shadow:0 -4px 15px #76e4c017;
+  transform-origin:bottom;
+}
+.forge-bars i:nth-child(1){--bar-height:23%;--bar-index:0}
+.forge-bars i:nth-child(2){--bar-height:34%;--bar-index:1}
+.forge-bars i:nth-child(3){--bar-height:30%;--bar-index:2}
+.forge-bars i:nth-child(4){--bar-height:51%;--bar-index:3}
+.forge-bars i:nth-child(5){--bar-height:43%;--bar-index:4}
+.forge-bars i:nth-child(6){--bar-height:69%;--bar-index:5}
+.forge-bars i:nth-child(7){--bar-height:61%;--bar-index:6}
+.forge-bars i:nth-child(8){
+  --bar-height:89%;--bar-index:7;
+  border-color:#e9b44c8c;
+  background:linear-gradient(0deg,#ff7a3d13,#e9b44c75);
+  box-shadow:0 -4px 17px #e9b44c36;
+}
+.forge-scan {
+  position:absolute;
+  inset:-5% auto -5% 0;
+  width:28%;
+  opacity:0;
+  background:linear-gradient(90deg,transparent,#cffced24,transparent);
+  transform:skewX(-20deg);
+}
+@media(prefers-reduced-motion:no-preference) {
+  .forge-bars i {animation:forge-rise .8s cubic-bezier(.15,.75,.3,1) calc(var(--bar-index)*85ms) backwards;}
+  .forge-orbit {animation:forge-orbit-in 1.3s ease-out backwards;}
+  .forge-scan {animation:forge-sweep 2.4s .6s ease-in-out both;}
+}
+@keyframes forge-rise {from{transform:scaleY(.18);opacity:.15}}
+@keyframes forge-orbit-in {from{transform:translateY(-50%) rotate(-12deg) scale(.83);opacity:.08}}
+@keyframes forge-sweep {0%{transform:translateX(-100%) skewX(-20deg);opacity:0}24%{opacity:1}100%{transform:translateX(370%) skewX(-20deg);opacity:0}}
+html[data-theme=dark] .result:not(.awaiting-inputs) {
+  background:radial-gradient(ellipse at 100% 0%,#76e4c01d,transparent 60%),
+    linear-gradient(125deg,#111927,#141c2e)!important;
+  border-top-color:#76e4c099;
+}
+html[data-theme=dark] .metric {box-shadow:inset 0 1px #f4f6fa0b;}
+html[data-theme=light] .wrap>.heading select {background:#fff;color:#172b4d;}
+@media(max-width:760px) {
+  .wrap>.heading {grid-template-columns:minmax(0,1fr);min-height:124px;gap:12px;}
+  .wrap>.heading .workspace-title h1 {max-width:16ch;}
+  .forge-art {width:65%;opacity:.65;}
+}
+@media(max-width:430px) {
+  .wrap>.heading {min-height:115px;}
+  .forge-art {width:59%;opacity:.53;}
+  .forge-orbit {right:-17%;}
+}
