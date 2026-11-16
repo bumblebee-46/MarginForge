@@ -60,7 +60,7 @@ const defs=[['vat','Sales VAT %'],['rate','Referral / commission %'],['threshold
 function setView(v){view=v;document.querySelectorAll('.section').forEach(e=>e.classList.toggle('active',e.id===v));syncNavigation();if(v==='settings')renderSettings();syncRoundingControl();}
 function invalidate(){batch=null;$('export').disabled=true;$('bulkOutput').hidden=true;$('compareOutput').innerHTML='';$('result').innerHTML='<div class="empty">Settings or costs changed.<br>Calculate again to update your pricing analysis.</div>'}
 function refresh(){ syncMarketOptions();syncNavigation();$('channels').innerHTML=Object.entries(CHANNELS).map(([k,v])=>`<button class="channel ${k===channel?'active':''}" data-channel="${k}" aria-pressed="${k===channel}"><img class="marketplace-logo marketplace-wordmark marketplace-${k}" src="assets/${k}.svg" alt="${v.name}" width="90" height="28"><span><strong>${v.name}</strong><small>${v.desc}</small></span></button>`).join('');$('channelbadge').textContent=CHANNELS[channel].name.toUpperCase();const p=profile();$('notice').innerHTML=p.confirmed?`<b>${CHANNELS[channel].name} · ${$('market').selectedOptions[0].text}</b> — Your saved fee profile is active. Amounts are in ${MARKETS[$('market').value][0]}; no currency conversion is applied.`:`<b>Review your fee profile.</b> ${CHANNELS[channel].name} uses editable example rates. Open Fee settings and confirm your account rates before calculating.`;$('profileSummary').innerHTML=[['Sales VAT',p.vat+'%'],['Referral / commission',p.threshold>0?p.low+'% up to '+money(p.threshold)+' · '+p.rate+'% above':p.rate+'%'],['Payment + additional rate',(p.payment+p.extra)+'%'],['Fixed fee',money(p.fixed)],['Fee VAT',p.recover?'Recoverable — excluded from cost':p.feeVat+'% non-recoverable'],['Profile status',p.confirmed?'Confirmed by you':'Needs review']].map(([a,b])=>`<div class="row"><span>${a}</span><b>${esc(b)}</b></div>`).join('');renderSettings();syncWorkbookUI();syncRoundingControl();syncBulkTemplateUI();invalidate()}
-function renderSettings(){const p=profile();if(p.workbook){renderWorkbookSettings(p);return;}$('settingsForm').hidden=false;$('settingsNotice').textContent='Starting values are examples, not a verified fee schedule. Enter your account rates. FBA fees are entered per product.';$('settingsInfo').textContent='Sales VAT is deducted from VAT-inclusive revenue. Fee VAT adds a cost only when non-recoverable. Use your account fee settings for this market.';$('settingsTitle').textContent=CHANNELS[channel].name+' · '+$('market').selectedOptions[0].text;$('settingsFields').innerHTML=defs.map(([k,l])=>`<label class="field">${l}<input name="${k}" type="number" min="0" ${['vat','rate','low','payment','extra','digitalRef','digitalFulfil','feeVat'].includes(k)?'max="100"':''} step=".01" value="${p[k]}" required></label>`).join('')+`<label class="field">VAT on marketplace fees<select name="recover"><option value="true" ${p.recover?'selected':''}>Recoverable — exclude from cost</option><option value="false" ${!p.recover?'selected':''}>Non-recoverable — include in cost</option></select></label>`;$('confirmed').checked=p.confirmed;$('saveStatus').textContent=''}
+function renderSettings(){const p=profile();if(p.workbook){renderWorkbookSettings(p);return;}$('settingsForm').hidden=false;$('settingsNotice').textContent='Starting values are examples, not a verified fee schedule. Enter your account rates. FBA fees are entered per product.';$('settingsInfo').textContent='Sales VAT is deducted from VAT-inclusive revenue. Fee VAT adds a cost only when non-recoverable. Use your account fee settings for this market.';$('settingsTitle').textContent=CHANNELS[channel].name+' · '+$('market').selectedOptions[0].text;$('settingsFields').innerHTML=defs.map(([k,l])=>`<label class="field">${l}<input name="${k}" type="number" min="0" ${['vat','rate','low','payment','extra','digitalRef','digitalFulfil','feeVat'].includes(k)?'max="100"':''} step=".01" value="${p[k]}" required></label>`).join('')+`<label class="field">VAT on marketplace fees<select name="recover"><option value="true" ${p.recover?'selected':''}>Recoverable — exclude from cost</option><option value="false" ${!p.recover?'selected':''}>Non-recoverable — include in cost</option></select></label>`;$('confirmed').checked=p.confirmed;$('saveStatus').textContent='';styleNumberControls($('settingsFields'));}
 function getProductRaw(forComparison=false){const n=k=>{const lab=$(k).closest('label');if(lab&&lab.hidden){const hv=Number($(k).value);return $(k).value.trim()!==''&&Number.isFinite(hv)&&hv>=0?hv:(k==='quantity'?1:0)}const x=Number($(k).value);if($(k).value.trim()===''||!Number.isFinite(x)||x<0)throw Error('Enter a valid non-negative '+k+' amount.');return x};return{label:$('sku').value,cost:n('cost'),fulfil:n('fulfil'),shipping:n('shipping'),storage:n('storage'),delivery:n('delivery'),other:n('other'),sp:forComparison?Number($('comparePrice').value):n('sp'),quantity:n('quantity'),adRate:n('adRate'),sellerStatus:$('sellerStatus').value}}
 function getProduct(forComparison=false){const r=getProductRaw(forComparison),q=$('fbaAtSp'),m=$('market').value;if(channel==='amazon'&&FBA_STEPS[m]&&!q.closest('label').hidden){if(q.value.trim()==='')throw Error('Enter the selling price at which this FBA fee was calculated.');if(Number(q.value)<r.cost)throw Error('The selling price this FBA fee was calculated at is lower than your cost of goods. Please check it.');r.fulfil=baseFbaFromQuoted(r.fulfil,Number(q.value),m);}return r}
 function calc(sp,r,p){if(p.amazonEU)return amazonEUCalc(sp,r,p);if(p.originalAmazon)return originalAmazonCalc(sp,r,p);if(p.workbook)return workbookCalc(sp,r,p);const revenue=round(sp+r.delivery);if(revenue<=0)throw Error('Customer payment must be greater than zero.');const vat=revenue*p.vat/(100+p.vat);const rate=p.threshold>0&&revenue<=p.threshold?p.low:p.rate;const commission=round(Math.max(p.min,revenue*rate/100));const payment=round(revenue*p.payment/100)+p.fixed;const extra=round(revenue*p.extra/100);const digital=round(commission*p.digitalRef/100)+round(r.fulfil*p.digitalFulfil/100);const feeVat=p.recover?0:round((commission+payment+extra+digital+r.fulfil)*p.feeVat/100);const costs=r.cost+r.fulfil+r.shipping+r.storage+r.other;const fees=commission+payment+extra+digital+feeVat;const profit=revenue-vat-costs-fees;return{sp,revenue,vat,rate,commission,payment,extra,digital,feeVat,costs,fees,profit,margin:profit/revenue*100}}
@@ -462,3 +462,36 @@ setView=function(v){setViewBeforeComparisonFees(v);syncComparisonFees();};
 const refreshBeforeComparisonFees=refresh;
 refresh=function(){refreshBeforeComparisonFees();syncComparisonFees();};
 syncComparisonFees();
+
+/* Pointer steppers mirror the number input's native Arrow Up and Arrow Down controls. */
+function styleNumberControls(root) {
+  for (const input of root.querySelectorAll('input[type="number"]')) {
+    if (input.closest('.number-control')) continue;
+    const frame=input.closest('.affix')||document.createElement('span');
+    if (!frame.contains(input)) {
+      input.before(frame);
+      frame.append(input);
+    }
+    frame.classList.add('number-control');
+    const steppers=document.createElement('span');
+    steppers.className='number-steppers';
+    steppers.setAttribute('aria-hidden','true');
+    for (const direction of ['up','down']) {
+      const stepper=document.createElement('span');
+      stepper.className='number-step number-step-'+direction;
+      stepper.addEventListener('pointerdown',event=>event.preventDefault());
+      stepper.addEventListener('click',event=>{
+        event.preventDefault();
+        if (input.disabled||input.readOnly) return;
+        const before=input.value;
+        input.focus({preventScroll:true});
+        if (direction==='up') input.stepUp();
+        else input.stepDown();
+        if (input.value!==before) input.dispatchEvent(new Event('input',{bubbles:true}));
+      });
+      steppers.append(stepper);
+    }
+    frame.append(steppers);
+  }
+}
+styleNumberControls(document);

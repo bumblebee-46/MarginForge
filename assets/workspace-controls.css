@@ -1,0 +1,121 @@
+/* Native form semantics with Fenronik-styled controls. */
+:root {
+  --control-surface:#111b2d;
+  --control-edge:#415474;
+  --control-hover:#76e4c0;
+  --control-mark:#acc2de;
+  --control-tint:#76e4c020;
+}
+html[data-theme=light] {
+  --control-surface:#fff;
+  --control-edge:#a7bcb9;
+  --control-hover:#217565;
+  --control-mark:#365b66;
+  --control-tint:#197b651b;
+}
+
+.number-control {
+  position:relative;
+  display:block;
+  min-width:0;
+}
+.number-control input[type=number] {
+  appearance:textfield;
+  -moz-appearance:textfield;
+  padding-right:36px;
+}
+.number-control input[type=number]::-webkit-inner-spin-button,
+.number-control input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance:none;
+  margin:0;
+}
+.number-control.affix.suffix::before {right:41px;}
+.number-control.affix.suffix input[type=number] {padding-right:61px;}
+.number-steppers {
+  position:absolute;
+  inset:3px 3px 3px auto;
+  display:grid;
+  grid-template-rows:1fr 1fr;
+  width:29px;
+  border:1px solid var(--control-edge);
+  border-radius:6px;
+  color:var(--control-mark);
+  background:var(--control-surface);
+  overflow:hidden;
+}
+.number-step {
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  touch-action:manipulation;
+}
+.number-step + .number-step {border-top:1px solid var(--control-edge);}
+.number-step::before {
+  content:"";
+  width:5px;
+  height:5px;
+  border-right:1.5px solid currentColor;
+  border-bottom:1.5px solid currentColor;
+  transform:translateY(1px) rotate(225deg);
+}
+.number-step-down::before {transform:translateY(-1px) rotate(45deg);}
+.number-step:hover {background:var(--control-tint);color:var(--control-hover);}
+.number-step:active {background:var(--control-edge);}
+.number-control:has(input:is(:disabled,[readonly])) .number-steppers {opacity:.4;pointer-events:none;}
+
+select:not([multiple]):not([size]), .market-picker-trigger {
+  min-height:42px;
+  border-radius:8px;
+}
+select:not([multiple]):not([size]) {
+  appearance:none;
+  padding-right:30px;
+  background-image:linear-gradient(45deg,transparent 49%,var(--control-mark) 51%),
+    linear-gradient(135deg,var(--control-mark) 49%,transparent 51%)!important;
+  background-position:right 15px top 52%,right 10px top 52%!important;
+  background-size:5px 5px!important;
+  background-repeat:no-repeat!important;
+}
+.language-control select:not([multiple]):not([size]) {
+  min-height:31px;
+  padding-right:23px;
+  background-position:right 11px top 52%,right 6px top 52%!important;
+}
+select:not(:disabled):hover,.number-control input:not(:disabled):hover {
+  border-color:var(--control-hover)!important;
+}
+.market-picker-trigger {border-color:var(--control-edge);}
+.market-picker-trigger>b {
+  flex:none;width:7px;height:7px;font-size:0;
+  border-right:1.5px solid var(--control-mark);
+  border-bottom:1.5px solid var(--control-mark);
+  transform:translateY(-2px) rotate(45deg);
+}
+.market-picker-trigger[aria-expanded=true]>b {transform:translateY(2px) rotate(225deg);}
+.market-picker-menu {
+  padding:6px;
+  border-radius:10px;
+  border-color:var(--control-edge);
+  box-shadow:0 12px 30px #07101e45;
+}
+.market-picker-menu button {min-height:42px;border-radius:7px;}
+
+button.primary,button.secondary,.help-trigger,.analysis-switch button {
+  border-radius:8px;
+}
+button.primary:not(:disabled),button.secondary:not(:disabled) {
+  box-shadow:inset 0 1px #ffffff32,0 2px 5px #06101d26;
+}
+button.primary:not(:disabled):active,button.secondary:not(:disabled):active {
+  box-shadow:inset 0 1px 3px #07101e3b;
+}
+.analysis-switch {border-radius:10px;padding:3px;}
+.analysis-switch button.active {
+  box-shadow:inset 0 1px #ffffff4a,0 2px 5px #06101d30;
+}
+@media(pointer:coarse) {
+  .number-steppers {width:38px;}
+  .number-control input[type=number] {min-height:53px;padding-right:45px;}
+  .number-control.affix.suffix::before {right:50px;}
+  .number-control.affix.suffix input[type=number] {padding-right:70px;}
+}
