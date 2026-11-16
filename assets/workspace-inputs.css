@@ -14,54 +14,9 @@ html[data-theme=light] {
   --control-tint:#197b651b;
 }
 
-.number-control {
-  position:relative;
-  display:block;
-  min-width:0;
-}
-.number-control input[type=number] {
-  appearance:textfield;
-  -moz-appearance:textfield;
-  padding-right:36px;
-}
-.number-control input[type=number]::-webkit-inner-spin-button,
-.number-control input[type=number]::-webkit-outer-spin-button {
-  -webkit-appearance:none;
-  margin:0;
-}
-.number-control.affix.suffix::before {right:41px;}
-.number-control.affix.suffix input[type=number] {padding-right:61px;}
-.number-steppers {
-  position:absolute;
-  inset:3px 3px 3px auto;
-  display:grid;
-  grid-template-rows:1fr 1fr;
-  width:29px;
-  border:1px solid var(--control-edge);
-  border-radius:6px;
-  color:var(--control-mark);
-  background:var(--control-surface);
-  overflow:hidden;
-}
-.number-step {
-  display:grid;
-  place-items:center;
-  cursor:pointer;
-  touch-action:manipulation;
-}
-.number-step + .number-step {border-top:1px solid var(--control-edge);}
-.number-step::before {
-  content:"";
-  width:5px;
-  height:5px;
-  border-right:1.5px solid currentColor;
-  border-bottom:1.5px solid currentColor;
-  transform:translateY(1px) rotate(225deg);
-}
-.number-step-down::before {transform:translateY(-1px) rotate(45deg);}
-.number-step:hover {background:var(--control-tint);color:var(--control-hover);}
-.number-step:active {background:var(--control-edge);}
-.number-control:has(input:is(:disabled,[readonly])) .number-steppers {opacity:.4;pointer-events:none;}
+input[type=number] {appearance:textfield;-moz-appearance:textfield;}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {-webkit-appearance:none;margin:0;}
 
 select:not([multiple]):not([size]), .market-picker-trigger {
   min-height:42px;
@@ -81,7 +36,7 @@ select:not([multiple]):not([size]) {
   padding-right:23px;
   background-position:right 11px top 52%,right 6px top 52%!important;
 }
-select:not(:disabled):hover,.number-control input:not(:disabled):hover {
+select:not(:disabled):hover,input[type=number]:not(:disabled):hover {
   border-color:var(--control-hover)!important;
 }
 .market-picker-trigger {border-color:var(--control-edge);}
@@ -112,10 +67,4 @@ button.primary:not(:disabled):active,button.secondary:not(:disabled):active {
 .analysis-switch {border-radius:10px;padding:3px;}
 .analysis-switch button.active {
   box-shadow:inset 0 1px #ffffff4a,0 2px 5px #06101d30;
-}
-@media(pointer:coarse) {
-  .number-steppers {width:38px;}
-  .number-control input[type=number] {min-height:53px;padding-right:45px;}
-  .number-control.affix.suffix::before {right:50px;}
-  .number-control.affix.suffix input[type=number] {padding-right:70px;}
 }
