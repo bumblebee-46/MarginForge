@@ -68,3 +68,41 @@ button.primary:not(:disabled):active,button.secondary:not(:disabled):active {
 .analysis-switch button.active {
   box-shadow:inset 0 1px #ffffff4a,0 2px 5px #06101d30;
 }
+
+.bulk-margin-controls {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:end;
+  gap:12px 24px;
+}
+.bulk-margin-controls fieldset {
+  border:0;
+  margin:0;
+  padding:0;
+  min-inline-size:0;
+}
+.bulk-margin-controls legend {padding:0;}
+.bulk-margin-options {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:8px 16px;
+  min-height:40px;
+  margin-top:4px;
+}
+.bulk-margin-options label {
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  min-height:32px;
+  cursor:pointer;
+}
+.bulk-margin-options input[type=radio] {
+  width:1em;
+  height:1em;
+  min-height:0;
+  margin:0;
+  padding:0;
+  accent-color:var(--accent);
+}
+#bulkTargetField {width:min(100%, 160px);}
