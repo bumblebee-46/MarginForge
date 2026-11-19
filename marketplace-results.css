@@ -1,0 +1,17 @@
+/* Marketplace marks identify results while the selector stays text-only. */
+.marketplace-identity {
+  display:inline-flex;align-items:center;gap:9px;vertical-align:middle;font-weight:650;
+}
+.marketplace-logo-tile {
+  display:inline-flex;align-items:center;justify-content:center;flex:none;
+  width:88px;height:32px;padding:4px 7px;
+  border:1px solid #34435d;border-radius:6px;background:#101829;
+}
+.marketplace-logo-tile img {display:block;width:100%;height:100%;object-fit:contain;}
+.result .marketplace-identity {margin:0 6px 10px 0;}
+.result-market-context {
+  display:inline-block;vertical-align:middle;margin-bottom:10px;
+  color:#bac8dd;font-size:11px;font-weight:650;letter-spacing:.04em;
+}
+html[data-theme=light] .result.awaiting-inputs .result-market-context {color:#4d5b62;}
+#compareOutput .marketplace-identity {white-space:nowrap;}
